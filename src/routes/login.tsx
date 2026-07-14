@@ -28,14 +28,7 @@ function LoginPage() {
     } finally { setLoading(false); }
   };
 
-  const quick = async (role: "student" | "advisor") => {
-    setLoading(true);
-    try {
-      const u = await login(role === "advisor" ? "advisor@demo.com" : "student@demo.com", "demo1234");
-      navigate({ to: u.role === "advisor" ? "/advisor" : "/student" });
-    } catch (err: any) { toast.error(err.message); }
-    finally { setLoading(false); }
-  };
+
 
   return (
     <div className="min-h-screen grid md:grid-cols-2">
@@ -58,21 +51,15 @@ function LoginPage() {
           <form onSubmit={submit} className="mt-8 space-y-4">
             <div>
               <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="you@university.edu" className="mt-1.5" />
+              <Input id="email" type="email" required value={email} onChange={e => setEmail(e.target.value)} className="mt-1.5" />
             </div>
             <div>
               <Label htmlFor="pw">Password</Label>
-              <Input id="pw" type="password" required value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" className="mt-1.5" />
+              <Input id="pw" type="password" required value={password} onChange={e => setPassword(e.target.value)} className="mt-1.5" />
             </div>
             <Button type="submit" className="w-full" disabled={loading}>{loading ? "Signing in..." : "Sign in"}</Button>
           </form>
-          <div className="mt-6 pt-6 border-t">
-            <div className="text-xs uppercase tracking-widest text-muted-foreground">Try the demo</div>
-            <div className="mt-3 grid grid-cols-2 gap-2">
-              <Button variant="outline" size="sm" onClick={() => quick("student")} disabled={loading}>Student demo</Button>
-              <Button variant="outline" size="sm" onClick={() => quick("advisor")} disabled={loading}>Advisor demo</Button>
-            </div>
-          </div>
+
           <div className="mt-6 text-sm text-muted-foreground">
             No account? <Link to="/signup" className="text-foreground font-medium underline underline-offset-4">Create one</Link>
           </div>
