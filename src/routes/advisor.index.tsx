@@ -3,7 +3,7 @@ import { StatCard } from "@/components/app-shell";
 import { MOCK_STUDENTS, RETENTION_TREND, COHORT_BREAKDOWN, INTERVENTIONS } from "@/lib/mock-data";
 import { LineChart, Line, ResponsiveContainer, XAxis, YAxis, Tooltip, BarChart, Bar, CartesianGrid } from "recharts";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Clock, CheckCircle2, MessageSquare, Briefcase } from "lucide-react";
 
 export const Route = createFileRoute("/advisor/")({ component: AdvisorDashboard });
 
@@ -16,17 +16,44 @@ function AdvisorDashboard() {
 
   return (
     <div className="space-y-8">
-      <div>
-        <div className="text-xs uppercase tracking-widest text-accent">Advisor console</div>
-        <h1 className="font-serif text-3xl font-semibold mt-1">Cohort at a glance</h1>
-        <p className="mt-2 text-muted-foreground">Spring 2026 · Northfield University</p>
+      <div className="flex flex-col sm:flex-row justify-between sm:items-end gap-4">
+        <div>
+          <div className="text-xs uppercase tracking-widest text-accent">Advisor console</div>
+          <h1 className="font-serif text-3xl font-semibold mt-1">Operational Dashboard</h1>
+          <p className="mt-2 text-muted-foreground">Spring 2026 · Northfield University</p>
+        </div>
+        <Button asChild><Link to="/advisor/students">View my caseload</Link></Button>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard label="Active students" value={total} hint="assigned to you" />
-        <StatCard label="High risk" value={high} hint="needs intervention" tone="danger" />
-        <StatCard label="Medium risk" value={medium} hint="watchlist" tone="warning" />
-        <StatCard label="Avg readiness" value={`${avgReadiness}`} hint="/ 100" tone="accent" />
+        <StatCard label="Active cases" value={total} hint="students assigned to you" />
+        <StatCard label="High-risk students" value={high} hint="needs immediate intervention" tone="danger" />
+        <StatCard label="Cohort performance" value={`${avgReadiness}/100`} hint="average readiness score" tone="accent" />
+        <StatCard label="Advisor workload" value={openInts} hint="open interventions" tone="warning" />
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-3">
+        <div className="rounded-xl border bg-card p-4 flex items-center gap-4">
+          <div className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center text-muted-foreground"><Clock size={20} /></div>
+          <div>
+            <div className="text-xs text-muted-foreground uppercase tracking-widest">Avg intervention time</div>
+            <div className="font-medium">2.4 days</div>
+          </div>
+        </div>
+        <div className="rounded-xl border bg-card p-4 flex items-center gap-4">
+          <div className="h-10 w-10 rounded-full bg-[color:var(--success)]/10 flex items-center justify-center text-[color:var(--success)]"><CheckCircle2 size={20} /></div>
+          <div>
+            <div className="text-xs text-muted-foreground uppercase tracking-widest">Success rate</div>
+            <div className="font-medium">88% resolved</div>
+          </div>
+        </div>
+        <div className="rounded-xl border bg-card p-4 flex items-center gap-4">
+          <div className="h-10 w-10 rounded-full bg-accent/10 flex items-center justify-center text-accent"><MessageSquare size={20} /></div>
+          <div>
+            <div className="text-xs text-muted-foreground uppercase tracking-widest">Response rate</div>
+            <div className="font-medium">94% within 24h</div>
+          </div>
+        </div>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
@@ -52,39 +79,12 @@ function AdvisorDashboard() {
         </div>
 
         <div className="rounded-xl border bg-card p-6">
-          <div className="text-xs uppercase tracking-widest text-muted-foreground">Open work</div>
-          <h2 className="font-serif text-xl mt-1">Interventions</h2>
-          <div className="mt-4 font-serif text-5xl font-semibold">{openInts}</div>
-          <div className="text-xs text-muted-foreground">active cases</div>
-          <Button asChild variant="outline" className="mt-4 w-full"><Link to="/advisor/interventions">Open center <ArrowRight size={14} className="ml-1" /></Link></Button>
-        </div>
-      </div>
-
-      <div className="grid gap-6 lg:grid-cols-2">
-        <div className="rounded-xl border bg-card p-6">
-          <div className="text-xs uppercase tracking-widest text-muted-foreground">Cohort</div>
-          <h2 className="font-serif text-xl mt-1">By country</h2>
-          <div className="mt-4 h-56">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={COHORT_BREAKDOWN}>
-                <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
-                <XAxis dataKey="country" stroke="var(--color-muted-foreground)" fontSize={11} />
-                <YAxis stroke="var(--color-muted-foreground)" fontSize={11} />
-                <Tooltip contentStyle={{ background: "var(--color-card)", border: "1px solid var(--color-border)", borderRadius: 8 }} />
-                <Bar dataKey="count" fill="var(--color-chart-2)" radius={[4,4,0,0]} />
-                <Bar dataKey="atRisk" fill="var(--color-chart-1)" radius={[4,4,0,0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-
-        <div className="rounded-xl border bg-card p-6">
           <div className="flex items-center justify-between">
             <div>
               <div className="text-xs uppercase tracking-widest text-muted-foreground">Attention needed</div>
               <h2 className="font-serif text-xl mt-1">Top at-risk students</h2>
             </div>
-            <Button asChild variant="ghost" size="sm"><Link to="/advisor/students">All students</Link></Button>
+            <Button asChild variant="ghost" size="sm"><Link to="/advisor/students">All</Link></Button>
           </div>
           <div className="mt-4 space-y-2">
             {MOCK_STUDENTS.filter(s => s.riskLevel !== "low").sort((a,b) => a.readinessScore - b.readinessScore).slice(0, 5).map(s => (
@@ -101,7 +101,6 @@ function AdvisorDashboard() {
                   <span className={`text-xs font-medium px-2 py-1 rounded-full ${
                     s.riskLevel === "high" ? "bg-destructive/10 text-destructive" : "bg-[color:var(--warning)]/15 text-[color:var(--warning)]"
                   }`}>{s.riskLevel}</span>
-                  <div className="text-xs text-muted-foreground mt-1">Score {s.readinessScore}</div>
                 </div>
               </Link>
             ))}

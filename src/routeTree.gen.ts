@@ -23,9 +23,10 @@ import { Route as StudentJourneyRouteImport } from './routes/student.journey'
 import { Route as StudentCompanionRouteImport } from './routes/student.companion'
 import { Route as StudentCommunityRouteImport } from './routes/student.community'
 import { Route as AdvisorStudentsRouteImport } from './routes/advisor.students'
-import { Route as AdvisorRiskRouteImport } from './routes/advisor.risk'
+import { Route as AdvisorRetentionRouteImport } from './routes/advisor.retention'
 import { Route as AdvisorReportsRouteImport } from './routes/advisor.reports'
 import { Route as AdvisorInterventionsRouteImport } from './routes/advisor.interventions'
+import { Route as AdvisorComplianceRouteImport } from './routes/advisor.compliance'
 import { Route as StudentReadinessReportRouteImport } from './routes/student.readiness.report'
 import { Route as AdvisorStudentsIdRouteImport } from './routes/advisor.students.$id'
 
@@ -99,9 +100,9 @@ const AdvisorStudentsRoute = AdvisorStudentsRouteImport.update({
   path: '/students',
   getParentRoute: () => AdvisorRoute,
 } as any)
-const AdvisorRiskRoute = AdvisorRiskRouteImport.update({
-  id: '/risk',
-  path: '/risk',
+const AdvisorRetentionRoute = AdvisorRetentionRouteImport.update({
+  id: '/retention',
+  path: '/retention',
   getParentRoute: () => AdvisorRoute,
 } as any)
 const AdvisorReportsRoute = AdvisorReportsRouteImport.update({
@@ -112,6 +113,11 @@ const AdvisorReportsRoute = AdvisorReportsRouteImport.update({
 const AdvisorInterventionsRoute = AdvisorInterventionsRouteImport.update({
   id: '/interventions',
   path: '/interventions',
+  getParentRoute: () => AdvisorRoute,
+} as any)
+const AdvisorComplianceRoute = AdvisorComplianceRouteImport.update({
+  id: '/compliance',
+  path: '/compliance',
   getParentRoute: () => AdvisorRoute,
 } as any)
 const StudentReadinessReportRoute = StudentReadinessReportRouteImport.update({
@@ -131,9 +137,10 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/student': typeof StudentRouteWithChildren
+  '/advisor/compliance': typeof AdvisorComplianceRoute
   '/advisor/interventions': typeof AdvisorInterventionsRoute
   '/advisor/reports': typeof AdvisorReportsRoute
-  '/advisor/risk': typeof AdvisorRiskRoute
+  '/advisor/retention': typeof AdvisorRetentionRoute
   '/advisor/students': typeof AdvisorStudentsRouteWithChildren
   '/student/community': typeof StudentCommunityRoute
   '/student/companion': typeof StudentCompanionRoute
@@ -150,9 +157,10 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
+  '/advisor/compliance': typeof AdvisorComplianceRoute
   '/advisor/interventions': typeof AdvisorInterventionsRoute
   '/advisor/reports': typeof AdvisorReportsRoute
-  '/advisor/risk': typeof AdvisorRiskRoute
+  '/advisor/retention': typeof AdvisorRetentionRoute
   '/advisor/students': typeof AdvisorStudentsRouteWithChildren
   '/student/community': typeof StudentCommunityRoute
   '/student/companion': typeof StudentCompanionRoute
@@ -172,9 +180,10 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/student': typeof StudentRouteWithChildren
+  '/advisor/compliance': typeof AdvisorComplianceRoute
   '/advisor/interventions': typeof AdvisorInterventionsRoute
   '/advisor/reports': typeof AdvisorReportsRoute
-  '/advisor/risk': typeof AdvisorRiskRoute
+  '/advisor/retention': typeof AdvisorRetentionRoute
   '/advisor/students': typeof AdvisorStudentsRouteWithChildren
   '/student/community': typeof StudentCommunityRoute
   '/student/companion': typeof StudentCompanionRoute
@@ -195,9 +204,10 @@ export interface FileRouteTypes {
     | '/login'
     | '/signup'
     | '/student'
+    | '/advisor/compliance'
     | '/advisor/interventions'
     | '/advisor/reports'
-    | '/advisor/risk'
+    | '/advisor/retention'
     | '/advisor/students'
     | '/student/community'
     | '/student/companion'
@@ -214,9 +224,10 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/signup'
+    | '/advisor/compliance'
     | '/advisor/interventions'
     | '/advisor/reports'
-    | '/advisor/risk'
+    | '/advisor/retention'
     | '/advisor/students'
     | '/student/community'
     | '/student/companion'
@@ -235,9 +246,10 @@ export interface FileRouteTypes {
     | '/login'
     | '/signup'
     | '/student'
+    | '/advisor/compliance'
     | '/advisor/interventions'
     | '/advisor/reports'
-    | '/advisor/risk'
+    | '/advisor/retention'
     | '/advisor/students'
     | '/student/community'
     | '/student/companion'
@@ -359,11 +371,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdvisorStudentsRouteImport
       parentRoute: typeof AdvisorRoute
     }
-    '/advisor/risk': {
-      id: '/advisor/risk'
-      path: '/risk'
-      fullPath: '/advisor/risk'
-      preLoaderRoute: typeof AdvisorRiskRouteImport
+    '/advisor/retention': {
+      id: '/advisor/retention'
+      path: '/retention'
+      fullPath: '/advisor/retention'
+      preLoaderRoute: typeof AdvisorRetentionRouteImport
       parentRoute: typeof AdvisorRoute
     }
     '/advisor/reports': {
@@ -378,6 +390,13 @@ declare module '@tanstack/react-router' {
       path: '/interventions'
       fullPath: '/advisor/interventions'
       preLoaderRoute: typeof AdvisorInterventionsRouteImport
+      parentRoute: typeof AdvisorRoute
+    }
+    '/advisor/compliance': {
+      id: '/advisor/compliance'
+      path: '/compliance'
+      fullPath: '/advisor/compliance'
+      preLoaderRoute: typeof AdvisorComplianceRouteImport
       parentRoute: typeof AdvisorRoute
     }
     '/student/readiness/report': {
@@ -410,17 +429,19 @@ const AdvisorStudentsRouteWithChildren = AdvisorStudentsRoute._addFileChildren(
 )
 
 interface AdvisorRouteChildren {
+  AdvisorComplianceRoute: typeof AdvisorComplianceRoute
   AdvisorInterventionsRoute: typeof AdvisorInterventionsRoute
   AdvisorReportsRoute: typeof AdvisorReportsRoute
-  AdvisorRiskRoute: typeof AdvisorRiskRoute
+  AdvisorRetentionRoute: typeof AdvisorRetentionRoute
   AdvisorStudentsRoute: typeof AdvisorStudentsRouteWithChildren
   AdvisorIndexRoute: typeof AdvisorIndexRoute
 }
 
 const AdvisorRouteChildren: AdvisorRouteChildren = {
+  AdvisorComplianceRoute: AdvisorComplianceRoute,
   AdvisorInterventionsRoute: AdvisorInterventionsRoute,
   AdvisorReportsRoute: AdvisorReportsRoute,
-  AdvisorRiskRoute: AdvisorRiskRoute,
+  AdvisorRetentionRoute: AdvisorRetentionRoute,
   AdvisorStudentsRoute: AdvisorStudentsRouteWithChildren,
   AdvisorIndexRoute: AdvisorIndexRoute,
 }
