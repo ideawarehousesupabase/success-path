@@ -97,9 +97,11 @@ function LoginPage() {
             <Button type="submit" className="w-full" disabled={loading}>{loading ? "Signing in..." : "Sign in"}</Button>
           </form>
 
-          <div className="mt-6 text-sm text-muted-foreground">
-            No account? <Link to="/signup" className="text-foreground font-medium underline underline-offset-4">Create one</Link>
-          </div>
+          {role === "student" && (
+            <div className="mt-6 text-sm text-muted-foreground">
+              No account? <Link to="/signup" className="text-foreground font-medium underline underline-offset-4">Create one</Link>
+            </div>
+          )}
         </div>
       </div>
     </div>
