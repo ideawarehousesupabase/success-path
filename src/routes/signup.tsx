@@ -45,8 +45,8 @@ function SignupPage() {
       <div className="flex items-center justify-center p-8">
         <div className="w-full max-w-sm">
           <div className="md:hidden mb-8"><Logo /></div>
-          <h1 className="font-serif text-3xl font-semibold">Create your account</h1>
-          <p className="mt-1 text-sm text-muted-foreground">Enter your details below to get started.</p>
+          <h1 className="font-serif text-3xl font-semibold">Create student account</h1>
+          <p className="mt-1 text-sm text-muted-foreground">Student registration. Advisors should log in with their provided credentials.</p>
 
           <form onSubmit={submit} className="mt-6 space-y-4">
             <div>
