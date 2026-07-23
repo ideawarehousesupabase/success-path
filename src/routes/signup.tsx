@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { useAuth, type UserRole } from "@/lib/auth";
+import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,7 +12,6 @@ export const Route = createFileRoute("/signup")({ component: SignupPage });
 function SignupPage() {
   const { signup } = useAuth();
   const navigate = useNavigate();
-  const [role, setRole] = useState<UserRole>("student");
   const [form, setForm] = useState({ name: "", email: "", password: "" });
   const [loading, setLoading] = useState(false);
 
@@ -20,9 +19,9 @@ function SignupPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      const u = await signup({ ...form, role });
+      const u = await signup({ ...form, role: "student" });
       toast.success(`Account created — welcome, ${u.name.split(" ")[0]}!`);
-      navigate({ to: u.role === "advisor" ? "/advisor" : "/student" });
+      navigate({ to: "/student" });
     } catch (err: any) {
       toast.error(err.message);
     } finally { setLoading(false); }
@@ -47,16 +46,7 @@ function SignupPage() {
         <div className="w-full max-w-sm">
           <div className="md:hidden mb-8"><Logo /></div>
           <h1 className="font-serif text-3xl font-semibold">Create your account</h1>
-          <p className="mt-1 text-sm text-muted-foreground">Choose the experience that fits you.</p>
-
-          <div className="mt-6 grid grid-cols-2 rounded-lg border p-1 bg-secondary">
-            {(["student","advisor"] as const).map(r => (
-              <button key={r} type="button" onClick={() => setRole(r)}
-                className={`px-3 py-2 text-sm rounded-md capitalize transition ${role === r ? "bg-background shadow-sm font-medium" : "text-muted-foreground"}`}>
-                {r}
-              </button>
-            ))}
-          </div>
+          <p className="mt-1 text-sm text-muted-foreground">Enter your details below to get started.</p>
 
           <form onSubmit={submit} className="mt-6 space-y-4">
             <div>
